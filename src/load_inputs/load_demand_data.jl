@@ -119,7 +119,7 @@ function validatetimebasis(inputs::Dict)
     allequal(x) = all(y -> y == x[1], x)
     ok = allequal(check_equal)
 
-    if ~ok
+    if !ok
         error("""Critical error in time series construction:
                  lengths of the various time series, and/or the expected
                  total length based on the number of representative periods and their length,
