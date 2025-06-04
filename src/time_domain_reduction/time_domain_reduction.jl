@@ -101,7 +101,7 @@ function parse_data(myinputs)
 end
 
 @doc raw"""
-    parse_mutli_period_data(inputs_dict)
+    parse_multi_stage_data(inputs_dict)
 
 Get demand, solar, wind, and other curves from multi-stage input data.
 
