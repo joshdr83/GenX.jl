@@ -181,6 +181,7 @@ Each file contains cost and performance parameters for various generators and ot
 ||Retrofit = 0: is not a retrofit technology.|
 |Retrofit\_Id | Unique identifier to group retrofittable source technologies with retrofit options inside the same zone.|
 |Retrofit\_Efficiency | [0,1], Efficiency of the retrofit technology.|
+|MW_s_per_MW|Amount of inertia contributed by each MW of capacity while online (MW-s/MW). Required when `InertiaRequirement` is used.|
 
 ##### Table 5b: Settings-specific columns in all resource .csv file
 ---
@@ -235,6 +236,7 @@ Each file contains cost and performance parameters for various generators and ot
 |Fuel2\_Min\_Cofire_Level\_Start  |The minimum blendng level of 'Fuel2' in total heat inputs of a mulit-fuel generator (MULTI_FUELS = 1) during the start-up process. |
 |Fuel2\_Max\_Cofire\_Level  |The maximum blendng level of 'Fuel2' in total heat inputs of a mulit-fuel generator (MULTI_FUELS = 1) during the normal generation process. |
 |Fuel2\_Max\_Cofire_Level\_Start  |The maximum blendng level of 'Fuel2' in total heat inputs of a mulit-fuel generator (MULTI_FUELS = 1) during the start-up process. |
+|MW_s_per_MW|Amount of inertia contributed by each MW of capacity while online (MW-s/MW). Required when `InertiaRequirement` is used. |
 
 ##### Table 6b: Settings-specific columns in the Thermal.csv file
 ---
@@ -789,3 +791,13 @@ This file contains inputs specifying regional hydrogen production requirements. 
 |Constraint\_Description| Names of hydrogen demand constraints; not to be read by model, but used as a helpful notation to the model user. |
 |Hydrogen\_Demand\_kt| Hydrogen production requirements in 1,000 tons|
 |PriceCap| Price of hydrogen per metric ton ($/t)|
+
+### 2.9 inertia_req.csv
+
+This optional file specifies the minimum system inertia requirement for each period. It is required when the setting `InertiaRequirement` is set to 1 in `genx_settings.yml`.
+
+###### Table 28: Structure of the inertia_req.csv file
+---
+|**Column Name** | **Description**|
+| :------------ | :-----------|
+|MW_s|System inertia requirement in megawatt-seconds that must be met in every modeled hour|

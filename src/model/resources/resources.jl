@@ -616,6 +616,7 @@ function fixed_om_cost_charge_per_mwyr(r::AbstractResource)
     get(r, :fixed_om_cost_charge_per_mwyr, default_zero)
 end
 start_cost_per_mw(r::AbstractResource) = get(r, :start_cost_per_mw, default_zero)
+mw_s_per_mw(r::AbstractResource) = get(r, :mw_s_per_mw, default_zero)
 
 # fuel
 fuel(r::AbstractResource) = get(r, :fuel, "None")

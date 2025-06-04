@@ -1351,6 +1351,27 @@ function cluster_inputs(inpath,
                 CSV.write(joinpath(inpath, "inputs", Stage_Outfiles[per]["Fuel"]),
                     NewFuelOutput)
 
+                inertia_path = joinpath(inpath,
+                    "inputs",
+                    "inputs_p$per",
+                    mysetup["PoliciesFolder"],
+                    "inertia_req.csv")
+                if isfile(inertia_path)
+                    inertia_df = CSV.read(inertia_path, DataFrame)
+                    req = inertia_df[:, :MW_s]
+                    new_req = Float64[]
+                    for c in M
+                        append!(new_req,
+                            req[((c - 1) * TimestepsPerRepPeriod + 1):(c * TimestepsPerRepPeriod)])
+                    end
+                    outpath = joinpath(inpath,
+                        "inputs",
+                        Stage_Outfiles[per]["Fuel"])
+                    tdr_stage = dirname(outpath)
+                    CSV.write(joinpath(tdr_stage, "inertia_req.csv"),
+                        DataFrame(MW_s = new_req))
+                end
+
                 ### TDR_Results/Period_map.csv
                 if v
                     println("Writing period map...")
@@ -1497,6 +1518,23 @@ function cluster_inputs(inpath,
             CSV.write(joinpath(inpath, "inputs", input_stage_directory, Fuel_Outfile),
                 NewFuelOutput)
 
+            inertia_path = joinpath(inpath,
+                "inputs",
+                input_stage_directory,
+                mysetup["PoliciesFolder"],
+                "inertia_req.csv")
+            if isfile(inertia_path)
+                inertia_df = CSV.read(inertia_path, DataFrame)
+                req = inertia_df[:, :MW_s]
+                new_req = Float64[]
+                for c in M
+                    append!(new_req,
+                        req[((c - 1) * TimestepsPerRepPeriod + 1):(c * TimestepsPerRepPeriod)])
+                end
+                tdr_stage = joinpath(inpath, "inputs", input_stage_directory, TimeDomainReductionFolder)
+                CSV.write(joinpath(tdr_stage, "inertia_req.csv"), DataFrame(MW_s = new_req))
+            end
+
             ### Period_map.csv
             if v
                 println("Writing period map...")
@@ -1611,6 +1649,19 @@ function cluster_inputs(inpath,
             println("Writing fuel profiles...")
         end
         CSV.write(joinpath(inpath, Fuel_Outfile), NewFuelOutput)
+
+        ### TDR_Results/inertia_req.csv
+        inertia_path = joinpath(inpath, mysetup["PoliciesFolder"], "inertia_req.csv")
+        if isfile(inertia_path)
+            inertia_df = CSV.read(inertia_path, DataFrame)
+            req = inertia_df[:, :MW_s]
+            new_req = Float64[]
+            for c in M
+                append!(new_req, req[((c - 1) * TimestepsPerRepPeriod + 1):(c * TimestepsPerRepPeriod)])
+            end
+            CSV.write(joinpath(inpath, TimeDomainReductionFolder, "inertia_req.csv"),
+                DataFrame(MW_s = new_req))
+        end
 
         ### TDR_Results/Period_map.csv
         if v

@@ -45,7 +45,9 @@ function time_domain_reduced_files_exist(tdrpath)
     tdr_demand = file_exists(tdrpath, ["Demand_data.csv", "Load_data.csv"])
     tdr_genvar = isfile(joinpath(tdrpath, "Generators_variability.csv"))
     tdr_fuels = isfile(joinpath(tdrpath, "Fuels_data.csv"))
-    return (tdr_demand && tdr_genvar && tdr_fuels)
+    inertia_src = joinpath(dirname(tdrpath), "policies", "inertia_req.csv")
+    tdr_inertia = !isfile(inertia_src) || isfile(joinpath(tdrpath, "inertia_req.csv"))
+    return (tdr_demand && tdr_genvar && tdr_fuels && tdr_inertia)
 end
 
 function run_genx_case_simple!(case::AbstractString, mysetup::Dict, optimizer::Any)

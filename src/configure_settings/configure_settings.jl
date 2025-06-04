@@ -29,6 +29,7 @@ function default_settings()
         "EnableJuMPStringNames" => false,
         "HourlyMatching" => 0,
         "HydrogenHourlyMatching" => 0,
+        "InertiaRequirement" => 0,
         "DC_OPF" => 0,
         "WriteOutputs" => "full",
         "ComputeConflicts" => 0,
@@ -144,7 +145,8 @@ function default_writeoutput()
         "WriteTransmissionLosses" => true,
         "WriteVirtualDischarge" => true,
         "WriteVREStor" => true,
-        "WriteAngles" => true)
+        "WriteAngles" => true,
+        "WriteInertia" => true)
 end
 
 function configure_writeoutput(output_settings_path::String, settings::Dict)

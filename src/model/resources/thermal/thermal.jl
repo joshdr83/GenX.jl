@@ -37,6 +37,7 @@ function thermal!(EP::Model, inputs::Dict, setup::Dict)
             for y in THERM_ALL))
         add_similar_to_expression!(EP[:eCapResMarBalance], eCapResMarBalanceThermal)
 
+
         if !isempty(intersect(MAINT, THERM_COMMIT))
             thermal_maintenance_capacity_reserve_margin_adjustment!(EP, inputs)
         end
@@ -45,6 +46,8 @@ function thermal!(EP::Model, inputs::Dict, setup::Dict)
             fusion_capacity_reserve_margin_adjustment!(EP, inputs)
         end
     end
+
+
 
     if setup["EnergyShareRequirement"] > 0
         if !isempty(intersect(FUSION, THERM_COMMIT))
