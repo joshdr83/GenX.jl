@@ -38,6 +38,14 @@ The 'main' branch is the current master branch of GenX. The various subdirectori
 
 3. `docs/` Contains source files for documentation pertaining to the model.
 
+## Inertia Branch
+
+This branch includes an optional system inertia constraint. Users must provide a
+new `inertia_req.csv` file and add an `MW_s_per_MW` column to each resource input
+table. Configuration flag `InertiaRequirement` enables the constraint and
+`WriteInertia` controls output of hourly inertia values. See `README_inertia.md`
+for details.
+
 ## Requirements
 
 GenX (v0.4.4) runs on Julia v1.6 through v1.9, with a minimum version of the package JuMP v1.1.1. Julia v1.10 and v1.11 are also supported. However, we recently noticed a decline in performance with Julia v1.10, which is currently under investigation. Therefore, **we recommend using Julia v1.9**, particularly for very large cases.
