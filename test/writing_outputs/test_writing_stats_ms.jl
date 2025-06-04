@@ -3,6 +3,9 @@ module TestWritingStatsMs
 using Test
 using CSV, DataFrames
 using GenX
+using Random
+
+Random.seed!(1234)
 
 # create temporary directory for testing 
 mkpath("writing_outputs/multi_stage_stats_tmp")
