@@ -8,7 +8,7 @@
 
 ## Overview
 GenX is a highly-configurable, [open source](https://github.com/GenXProject/GenX/blob/main/LICENSE) electricity resource capacity expansion model 
-that incorporates several state-of-the-art practices in electricity system planning to offer improved decision support for a changing electricity landscape. 
+that incorporates several state-of-the-art practices in electricity system planning to offer improved decision support for a changing electricity landscape.  
 
 The model was [originally developed](https://energy.mit.edu/publication/enhanced-decision-support-changing-electricity-landscape/) by 
 [Jesse D. Jenkins](https://mae.princeton.edu/people/faculty/jenkins) and 
