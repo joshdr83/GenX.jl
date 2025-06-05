@@ -44,7 +44,10 @@ function write_outputs(EP::Model, path::AbstractString, setup::Dict, inputs::Dic
         end
     end
 
-    # Dict containing the list of outputs to write
+    # Dict containing the list of outputs to write.  The configuration
+    # routine populates this dictionary with Boolean flags for each
+    # output file, and we reference it throughout this function to
+    # determine which files to produce.
     output_settings_d = setup["WriteOutputsSettingsDict"]
     write_settings_file(path, setup)
     write_system_env_summary(path)
