@@ -8,16 +8,16 @@ function write_inertia(path::AbstractString, inputs::Dict, setup::Dict, EP::Mode
 
     inertia = zeros(T)
     for y in 1:G
-        const = get(gen[y], :mw_s_per_mw, 0.0)
-        if const == 0.0
+        inertia_const = get(gen[y], :mw_s_per_mw, 0.0)
+        if inertia_const == 0.0
             continue
         end
         cap = value(EP[:eTotalCap][y]) * scale_factor
         avail = pP[y, :]
         if y in COMMIT
-            inertia .+= cap * const .* avail .* value.(EP[:vCOMMIT][y, :])
+            inertia .+= cap * inertia_const .* avail .* value.(EP[:vCOMMIT][y, :])
         else
-            inertia .+= cap * const .* avail
+            inertia .+= cap * inertia_const .* avail
         end
     end
     df = DataFrame(AnnualSum = sum(inertia .* inputs["omega"]))
