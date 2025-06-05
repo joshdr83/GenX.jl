@@ -224,6 +224,9 @@ function load_resource_df(path::AbstractString, scale_factor::Float64, resource_
     resource_in = load_dataframe(path)
     # rename columns lowercase for internal consistency
     rename!(resource_in, lowercase.(names(resource_in)))
+    if :mw_s_per_mw ∉ names(resource_in)
+        error("Required column MW_s_per_MW missing from $(basename(path))")
+    end
     scale_resources_data!(resource_in, scale_factor)
     # scale vre_stor columns if necessary
     resource_type == VreStorage && scale_vre_stor_data!(resource_in, scale_factor)

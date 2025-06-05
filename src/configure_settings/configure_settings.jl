@@ -101,6 +101,7 @@ function default_writeoutput()
         "WriteCapacity" => true,
         "WriteCapacityValue" => true,
         "WriteCapacityFactor" => true,
+        "WriteInertia" => true,
         "WriteCharge" => true,
         "WriteChargingCost" => true,
         "WriteCO2" => true,

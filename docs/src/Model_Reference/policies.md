@@ -31,6 +31,12 @@ Pages = ["maximum_capacity_requirement.jl"]
 GenX.hydrogen_demand!
 ```
 
+## System inertia requirement
+```@autodocs
+Modules = [GenX]
+Pages = ["inertia_requirement.jl"]
+```
+
 ## Hourly clean supply matching constraint
 ```@autodocs
 Modules = [GenX]

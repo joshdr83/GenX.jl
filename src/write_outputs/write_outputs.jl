@@ -91,6 +91,12 @@ function write_outputs(EP::Model, path::AbstractString, setup::Dict, inputs::Dic
         println(elapsed_time_capacityfactor)
     end
 
+    if output_settings_d["WriteInertia"] && haskey(inputs, "InertiaReq")
+        elapsed_time_inertia = @elapsed write_inertia(path, inputs, setup, EP)
+        println("Time elapsed for writing inertia is")
+        println(elapsed_time_inertia)
+    end
+
     if output_settings_d["WriteStorage"]
         elapsed_time_storage = @elapsed write_storage(path, inputs, setup, EP)
         println("Time elapsed for writing storage is")

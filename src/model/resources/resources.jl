@@ -617,6 +617,9 @@ function fixed_om_cost_charge_per_mwyr(r::AbstractResource)
 end
 start_cost_per_mw(r::AbstractResource) = get(r, :start_cost_per_mw, default_zero)
 
+# inertia contribution per MW of installed capacity
+mw_s_per_mw(r::AbstractResource) = get(r, :mw_s_per_mw, default_zero)
+
 # fuel
 fuel(r::AbstractResource) = get(r, :fuel, "None")
 function start_fuel_mmbtu_per_mw(r::AbstractResource)
