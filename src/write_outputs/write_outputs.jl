@@ -167,6 +167,11 @@ function write_outputs(EP::Model, path::AbstractString, setup::Dict, inputs::Dic
             println("Time elapsed for writing reliability is")
             println(elapsed_time_reliability)
         end
+        if output_settings_d["WriteInertia"] && setup["InertiaRequirement"] == 1
+            elapsed_time_inertia = @elapsed write_inertia(path, inputs, setup, EP)
+            println("Time elapsed for writing inertia is")
+            println(elapsed_time_inertia)
+        end
         if !isempty(inputs["STOR_ALL"]) || !isempty(VS_STOR)
             if output_settings_d["WriteStorageDual"]
                 elapsed_time_stordual = @elapsed write_storagedual(path, inputs, setup, EP)

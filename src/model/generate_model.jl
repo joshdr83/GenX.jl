@@ -119,6 +119,10 @@ function generate_model(setup::Dict, inputs::Dict, OPTIMIZER::MOI.OptimizerWithA
         create_empty_expression!(EP, :eH2DemandRes, inputs["NumberOfH2DemandReqs"])
     end
 
+    if setup["InertiaRequirement"] == 1
+        create_empty_expression!(EP, :eInertiaBalance, T)
+    end
+
     # Infrastructure
     discharge!(EP, inputs, setup)
 
@@ -241,6 +245,10 @@ function generate_model(setup::Dict, inputs::Dict, OPTIMIZER::MOI.OptimizerWithA
     # Hydrogen demand limits
     if setup["HydrogenMinimumProduction"] > 0
         hydrogen_demand!(EP, inputs, setup)
+    end
+
+    if setup["InertiaRequirement"] == 1
+        inertia_requirement!(EP, inputs, setup)
     end
 
     if setup["ModelingToGenerateAlternatives"] == 1

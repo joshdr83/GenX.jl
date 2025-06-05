@@ -680,6 +680,7 @@ function cluster_inputs(inpath,
     Demand_Outfile = joinpath(TimeDomainReductionFolder, "Demand_data.csv")
     GVar_Outfile = joinpath(TimeDomainReductionFolder, "Generators_variability.csv")
     Fuel_Outfile = joinpath(TimeDomainReductionFolder, "Fuels_data.csv")
+    Inertia_Outfile = joinpath(TimeDomainReductionFolder, "inertia_req.csv")
     PMap_Outfile = joinpath(TimeDomainReductionFolder, "Period_map.csv")
     YAML_Outfile = joinpath(TimeDomainReductionFolder, "time_domain_reduction_settings.yml")
 
@@ -1187,6 +1188,8 @@ function cluster_inputs(inpath,
     GVOutputData = vcat(gvDFs...)     # Generators Variability
     DMOutputData = vcat(dmDFs...)     # Demand Profiles
     FPOutputData = vcat(fpDFs...)     # Fuel Profiles
+    inertia_output = reduce(vcat,
+        [myinputs["InertiaRequirementTS"][((M[m] - 1) * TimestepsPerRepPeriod + 1):(M[m] * TimestepsPerRepPeriod)] for m in 1:length(M)])
 
     ##### Step 5: Evaluation
 
@@ -1243,6 +1246,7 @@ function cluster_inputs(inpath,
                 Stage_Outfiles[per]["Fuel"] = joinpath("inputs_p$per", Fuel_Outfile)
                 Stage_Outfiles[per]["PMap"] = joinpath("inputs_p$per", PMap_Outfile)
                 Stage_Outfiles[per]["YAML"] = joinpath("inputs_p$per", YAML_Outfile)
+                Stage_Outfiles[per]["Inertia"] = joinpath("inputs_p$per", Inertia_Outfile)
                 if !isempty(inputs_dict[per]["VRE_STOR"])
                     Stage_Outfiles[per]["GSolar"] = joinpath("inputs_p$per",
                         SolarVar_Outfile)
@@ -1350,6 +1354,9 @@ function cluster_inputs(inpath,
                 end
                 CSV.write(joinpath(inpath, "inputs", Stage_Outfiles[per]["Fuel"]),
                     NewFuelOutput)
+
+                inertia_df = DataFrame(MW_s = inertia_output)
+                CSV.write(joinpath(inpath, "inputs", Stage_Outfiles[per]["Inertia"]), inertia_df)
 
                 ### TDR_Results/Period_map.csv
                 if v
@@ -1497,6 +1504,9 @@ function cluster_inputs(inpath,
             CSV.write(joinpath(inpath, "inputs", input_stage_directory, Fuel_Outfile),
                 NewFuelOutput)
 
+            inertia_df = DataFrame(MW_s = inertia_output)
+            CSV.write(joinpath(inpath, "inputs", input_stage_directory, Inertia_Outfile), inertia_df)
+
             ### Period_map.csv
             if v
                 println("Writing period map...")
@@ -1611,6 +1621,9 @@ function cluster_inputs(inpath,
             println("Writing fuel profiles...")
         end
         CSV.write(joinpath(inpath, Fuel_Outfile), NewFuelOutput)
+
+        inertia_df = DataFrame(MW_s = inertia_output)
+        CSV.write(joinpath(inpath, Inertia_Outfile), inertia_df)
 
         ### TDR_Results/Period_map.csv
         if v

@@ -56,6 +56,12 @@ Modules = [GenX]
 Pages = ["write_charge.jl"]
 ```
 
+## Write Inertia
+```@autodocs
+Modules = [GenX]
+Pages = ["write_inertia.jl"]
+```
+
 ## Write Non-served-energy
 ```@autodocs
 Modules = [GenX]
