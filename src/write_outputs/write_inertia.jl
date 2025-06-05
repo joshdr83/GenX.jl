@@ -32,6 +32,8 @@ function write_inertia(path::AbstractString, inputs::Dict, setup::Dict, EP::Mode
     end
 
     df = DataFrame(Resource = resources, Zone = zones, AnnualSum = inertia * weight)
-    write_temporal_data(df, inertia, path, setup, "inertia")
-    return nothing
+    # write_temporal_data(df, inertia, path, setup, "inertia")
+    CSV.write(joinpath(path, "inertia.csv"), df)
+    return df
+    # return nothing
 end
