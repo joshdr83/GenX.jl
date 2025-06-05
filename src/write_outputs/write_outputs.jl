@@ -437,7 +437,7 @@ function write_outputs(EP::Model, path::AbstractString, setup::Dict, inputs::Dic
             println(elapsed_time_max_cap_req)
         end
 
-        if setup["InertiaRequirement"] == 1 && output_settings_d["WriteInertia"]
+        if output_settings_d["WriteInertia"]
             elapsed_time_inertia = @elapsed write_inertia(path,
                 inputs,
                 setup,
