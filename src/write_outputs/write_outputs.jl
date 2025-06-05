@@ -265,6 +265,13 @@ function write_outputs(EP::Model, path::AbstractString, setup::Dict, inputs::Dic
         println(elapsed_time_angles)
     end
 
+    # Write price outputs regardless of multi-stage configuration
+    if has_duals(EP) == 1 && output_settings_d["WritePrice"]
+        elapsed_time_price = @elapsed write_price(path, inputs, setup, EP)
+        println("Time elapsed for writing price is")
+        println(elapsed_time_price)
+    end
+
     # Temporary! Suppress these outputs until we know that they are compatable with multi-stage modeling
     if setup["MultiStage"] == 0
         dfEnergyRevenue = DataFrame()
@@ -272,11 +279,6 @@ function write_outputs(EP::Model, path::AbstractString, setup::Dict, inputs::Dic
         dfSubRevenue = DataFrame()
         dfRegSubRevenue = DataFrame()
         if has_duals(EP) == 1
-            if output_settings_d["WritePrice"]
-                elapsed_time_price = @elapsed write_price(path, inputs, setup, EP)
-                println("Time elapsed for writing price is")
-                println(elapsed_time_price)
-            end
 
             if output_settings_d["WriteEnergyRevenue"] ||
                output_settings_d["WriteNetRevenue"]
