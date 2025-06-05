@@ -9,15 +9,23 @@ is enabled and a reduced version of this file exists in the
 """
 function load_inertia_requirement!(setup::Dict, path::AbstractString, inputs::Dict)
     filename = "inertia_req.csv"
-    TDR_directory = joinpath(path, setup["TimeDomainReductionFolder"])
-    my_dir = get_systemfiles_path(setup, TDR_directory, path)
-    file_path = joinpath(my_dir, filename)
-    if isfile(file_path)
-        df = load_dataframe(file_path)
-        inputs["InertiaRequirementTS"] = df[!, :MW_s]
-        println(filename * " Successfully Read!")
+    tdr_path = joinpath(path, setup["TimeDomainReductionFolder"], filename)
+    policy_path = joinpath(path, setup["PoliciesFolder"], filename)
+
+    if setup["TimeDomainReduction"] == 1 && isfile(tdr_path)
+        df = load_dataframe(tdr_path)
+    elseif isfile(policy_path)
+        df = load_dataframe(policy_path)
     else
-        @warn filename * " not found in " * my_dir
+        @warn filename * " not found in " * policy_path
         inputs["InertiaRequirementTS"] = zeros(Float64, inputs["T"])
+        return nothing
     end
+
+    rename!(df, lowercase.(names(df)))
+    if :mw_s ∉ names(df)
+        error("inertia_req.csv data file is missing column MW_s")
+    end
+    inputs["InertiaRequirementTS"] = df[!, :mw_s]
+    println(filename * " Successfully Read!")
 end
