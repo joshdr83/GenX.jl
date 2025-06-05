@@ -2,6 +2,7 @@ ParameterScale: 1
 NetworkExpansion: 1
 Trans_Loss_Segments: 1
 UCommit: 2
+InertiaRequirement: 0
 StorageLosses: 1
 CO2Cap: 1
 MinCapReq: 1

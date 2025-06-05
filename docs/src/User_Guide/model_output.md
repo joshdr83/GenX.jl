@@ -109,6 +109,11 @@ This file summarizes the cost, revenue and profit for each generation technology
 | Cost| Total Cost. |$ |
 | Profit |Revenue minus Cost. |$ |
 
+### 1.10 hourly_inertia.csv
+
+Reports system inertia for each modeled hour. This file is written when
+`InertiaRequirement` is active and `WriteInertia` is enabled.
+
 ## 2 Settings-specific outputs
 
 This section includes the output files that GenX will print if corresponding function is specified in the Settings.

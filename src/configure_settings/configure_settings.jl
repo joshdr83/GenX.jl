@@ -15,6 +15,7 @@ function default_settings()
         "ParameterScale" => 0,
         "WriteShadowPrices" => 0,
         "UCommit" => 0,
+        "InertiaRequirement" => 0,
         "TimeDomainReduction" => 0,
         "TimeDomainReductionFolder" => "TDR_results",
         "OutputFullTimeSeries" => 0,
@@ -115,6 +116,7 @@ function default_writeoutput()
         "WriteFusion" => true,
         "WriteHourlyMatchingPrices" => true,
         "WriteHydrogenPrices" => true,
+        "WriteInertia" => true,
         "WriteMaintenance" => true,
         "WriteMaxCapReq" => true,
         "WriteMinCapReq" => true,
@@ -162,6 +164,7 @@ function configure_writeoutput(output_settings_path::String, settings::Dict)
         writeoutput["WriteReserveMarginWithWeights"] = false
         writeoutput["WriteAngles"] = false
         writeoutput["WriteTransmissionFlows"] = false
+        writeoutput["WriteInertia"] = false
     end
 
     # read in YAML file if provided

@@ -62,6 +62,11 @@ There are two ways to run GenX with either type of solver options (open-source f
 
 Detailed documentation for GenX can be found [here](https://genxproject.github.io/GenX.jl/dev).
 It includes details of each of GenX's methods, required and optional input files, and outputs.
+The inputs now require an additional `MW_s_per_MW` column in each resource file to
+specify inertia contribution per MW of installed capacity. For each period a
+`policies/inertia_req.csv` file with a `MW_s` column may be provided to set
+hourly system inertia requirements. Enable this feature by setting
+`InertiaRequirement: 1` in `genx_settings.yml`.
 Interested users may also want to browse through [prior publications](https://energy.mit.edu/genx/#publications) that have used GenX to understand the various features of the tool.
 
 

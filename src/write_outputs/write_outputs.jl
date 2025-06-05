@@ -115,6 +115,12 @@ function write_outputs(EP::Model, path::AbstractString, setup::Dict, inputs::Dic
         println(elapsed_time_power_balance)
     end
 
+    if output_settings_d["WriteInertia"] && setup["InertiaRequirement"] >= 1 && setup["UCommit"] >= 1
+        elapsed_time_inertia = @elapsed write_inertia(path, inputs, setup, EP)
+        println("Time elapsed for writing inertia is")
+        println(elapsed_time_inertia)
+    end
+
     if inputs["Z"] > 1
         if output_settings_d["WriteTransmissionFlows"]
             elapsed_time_flows = @elapsed write_transmission_flows(path, inputs, setup, EP)

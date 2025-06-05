@@ -84,8 +84,11 @@ The following tables summarize the model settings parameters and their default/p
 |MaxCapReq | Maximum system-wide technology capacity limit constraints.|
 || 1 = if one or more maximum technology capacity constraints are specified|
 || 0 = otherwise|
-|HydrogenMinimumProduction | Hydrogen production requirements from electrolyzers.|
-|1 = Constraint is active.|
+|HydrogenMinimumProduction | Hydrogen production requirements from electrolyzers.| 
+|1 = Constraint is active.| 
+||0 = Constraint is not active.| 
+|InertiaRequirement | Enforce system inertia requirement.| 
+||1 = Constraint is active if unit commitment is used.| 
 ||0 = Constraint is not active.| 
 
 ## 4. Network related

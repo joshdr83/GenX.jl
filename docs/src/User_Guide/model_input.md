@@ -16,7 +16,7 @@ All input files are in CSV format. Running the GenX model requires a minimum of 
 <ol start="3">
     <li>Demand_data.csv: specify time-series of demand profiles for each model zone, weights for each time step, demand shedding costs, and optional time domain reduction parameters.</li>
     <li>Generators_variability.csv: specify time-series of capacity factor/availability for each resource.</li>
-    <li>Resources folder: specify cost and performance data for generation, storage and demand flexibility resources.</li>
+    <li>Resources folder: specify cost and performance data for generation, storage and demand flexibility resources. Each resource file must include a column `MW_s_per_MW` describing its inertia contribution per MW.</li>
 </ol>
 ```
  
@@ -30,6 +30,7 @@ Additionally, the user may need to specify eight more **settings-specific** inpu
 7. Vre\_and\_stor\_solar\_variability.csv: specify time-series of capacity factor/availability for each solar PV resource that exists for every co-located VRE and storage resource (in DC terms).
 8. Vre\_and\_stor\_wind\_variability.csv: specify time-series of capacity factor/availability for each wind resource that exists for every co-located VRE and storage resource (in AC terms).
 9. Hydrogen\_demand.csv: specify regional hydrogen production requirements.
+10. inertia\_req.csv: specify hourly system inertia requirement in MW·s for each period. Use when `InertiaRequirement` is set to 1.
 
 
 !!! note "Note"
