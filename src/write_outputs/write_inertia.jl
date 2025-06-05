@@ -1,25 +1,37 @@
+@doc raw"""
+        write_inertia(path::AbstractString, inputs::Dict, setup::Dict, EP::Model)
+
+Write the hourly inertia contribution from each resource to `inertia.csv`.
+The function mirrors other time-series writers and supports annual or full
+outputs as well as full time-series reconstruction when time domain reduction
+is used.
+"""
 function write_inertia(path::AbstractString, inputs::Dict, setup::Dict, EP::Model)
     gen = inputs["RESOURCES"]
+    resources = inputs["RESOURCE_NAMES"]
+    zones = zone_id.(gen)
+
     G = inputs["G"]
-    names = inputs["RESOURCE_NAMES"]
-    zones = inputs["R_ZONES"]
-    COMMIT = inputs["COMMIT"]
     T = inputs["T"]
+    COMMIT = inputs["COMMIT"]
+
+    weight = inputs["omega"]
     scale_factor = setup["ParameterScale"] == 1 ? ModelScalingFactor : 1.0
-    avail = inputs["pP_Max"]
-    data = zeros(G, T)
+    availability = inputs["pP_Max"]
+
+    inertia = zeros(G, T)
     for y in COMMIT
-        data[y, :] .=
-            value.(EP[:vCOMMIT][y, :] .* cap_size(gen[y]) .* avail[y, :] .*
-                   scale_factor .* mw_s_per_mw(gen[y]))
+        inertia[y, :] .=
+            value.(EP[:vCOMMIT][y, :] .* cap_size(gen[y]) .* availability[y, :]) .*
+            scale_factor .* mw_s_per_mw(gen[y])
     end
     NON_COMMIT = setdiff(1:G, COMMIT)
     for y in NON_COMMIT
-        data[y, :] .= value.(EP[:eTotalCap][y]) .* avail[y, :] .* scale_factor .*
-                       mw_s_per_mw(gen[y])
+        inertia[y, :] .= value.(EP[:eTotalCap][y]) .* availability[y, :] .*
+                           scale_factor .* mw_s_per_mw(gen[y])
     end
-    df = DataFrame(Resource = names, Zone = zones)
-    df.AnnualSum = data * inputs["omega"]
-    write_temporal_data(df, data, path, setup, "inertia")
+
+    df = DataFrame(Resource = resources, Zone = zones, AnnualSum = inertia * weight)
+    write_temporal_data(df, inertia, path, setup, "inertia")
     return nothing
 end
