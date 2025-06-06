@@ -21,8 +21,8 @@ function load_inertia_requirement!(setup::Dict, path::AbstractString, inputs::Di
 
     if !(:mw_s in names(df))
         error("inertia_req.csv data file is missing column MW_s. Columns found: " * join(string.(names(df)), ", ") * " (" * file_path * ")")
+    end
+
     inputs["InertiaRequirementTS"] = df[!, :mw_s]
     println(filename * " Successfully Read! (" * file_path * ")")
-    inputs["InertiaRequirementTS"] = df[!, :MW_s]
-    println(filename * " Successfully Read!")
 end
