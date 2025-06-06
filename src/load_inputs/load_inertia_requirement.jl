@@ -23,9 +23,12 @@ function load_inertia_requirement!(setup::Dict, path::AbstractString, inputs::Di
         return nothing
     end
 
-    rename!(df, lowercase.(names(df)))
+    # normalize column names: remove BOMs, trim whitespace, and lowercase
+    clean(name) = lowercase(strip(replace(String(name), '\ufeff' => "")))
+    rename!(df, Symbol.(clean.(names(df))))
     if :mw_s ∉ names(df)
-        error("inertia_req.csv data file is missing column MW_s")
+        cols = join(names(df), ", ")
+        error("inertia_req.csv data file is missing column MW_s. Columns found: $cols")
     end
     inputs["InertiaRequirementTS"] = df[!, :mw_s]
     println(filename * " Successfully Read!")
