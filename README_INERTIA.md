@@ -3,9 +3,9 @@
 This branch adds an optional inertia constraint to GenX.
 
 ## New Inputs
-* `policies/inertia_req.csv` — a file that includes a column `MW_s`
-  with 8760 rows of hourly inertia requirement values in MW·s.
-  Leading/trailing spaces and a UTF‑8 byte‑order mark in the header are
+* `policies/inertia_req.csv` - a file that includes a column `MW_s`
+  with 8760 rows of hourly inertia requirement values in MW*s.
+  Leading/trailing spaces and a UTF-8 byte-order mark in the header are
   ignored, and any additional columns are ignored.
 * All resource input tables may include a column `MW_s_per_MW` giving
   the inertia contribution per MW of installed capacity.

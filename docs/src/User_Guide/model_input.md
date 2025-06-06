@@ -486,7 +486,7 @@ In addition to the files described above, the `resources` folder contains a fold
 
 The `inertia_req.csv` file must include a column named `MW_s` with
 8760 hourly values describing the minimum system inertia requirement in
-megawatt-seconds. Leading or trailing spaces and a UTF‑8 byte‑order
+megawatt-seconds. Leading or trailing spaces and a UTF-8 byte-order
 mark in the header are ignored. Any additional columns are ignored.
 
 !!! note
