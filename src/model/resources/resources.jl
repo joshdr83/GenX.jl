@@ -639,6 +639,7 @@ num_fuels(r::AbstractResource) = get(r, :num_fuels, default_zero)
 function heat_rate_cols(r::AbstractResource; tag::Int64)
     get(r, Symbol(string("heat_rate", tag, "_mmbtu_per_mwh")), default_zero)
 end
+mw_s_per_mw(r::AbstractResource) = get(r, :mw_s_per_mw, default_zero)
 function max_cofire_cols(r::AbstractResource; tag::Int64)
     get(r, Symbol(string("fuel", tag, "_max_cofire_level")), 1)
 end
