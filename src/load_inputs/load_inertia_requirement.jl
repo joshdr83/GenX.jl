@@ -16,9 +16,9 @@ function load_inertia_requirement!(setup::Dict, path::AbstractString, inputs::Di
 
     df = load_dataframe(file_path)
 
-    if :MW_s ∉ names(df)
-        error("inertia_req.csv data file is missing column MW_s")
-    end
+    # if :MW_s ∉ names(df)
+    #     error("inertia_req.csv data file is missing column MW_s")
+    # end
 
     inputs["InertiaRequirementTS"] = df[!, :MW_s]
     println(filename * " Successfully Read!")
