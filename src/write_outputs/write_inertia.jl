@@ -1,5 +1,8 @@
 function write_inertia(path::AbstractString, inputs::Dict, setup::Dict, EP::Model)
     gen = inputs["RESOURCES"]
+    resources = inputs["RESOURCE_NAMES"]
+    zones = zone_id.(gen)
+
     G = inputs["G"]
     T = inputs["T"]
     COMMIT = inputs["COMMIT"]
@@ -7,20 +10,23 @@ function write_inertia(path::AbstractString, inputs::Dict, setup::Dict, EP::Mode
     weight = inputs["omega"]
     scale_factor = setup["ParameterScale"] == 1 ? ModelScalingFactor : 1
 
-    inertia = zeros(1, T)
-    for t in 1:T
-        total = 0.0
-        for y in 1:G
+    # Inertia contributed by each resource in each time step
+    inertia = zeros(G, T)
+    for y in 1:G
+        for t in 1:T
             if y in COMMIT
-                total += mw_s_per_mw(gen[y]) * pP_Max[y, t] * cap_size(gen[y]) * value(EP[:vCOMMIT][y, t])
+                inertia[y, t] = mw_s_per_mw(gen[y]) * pP_Max[y, t] * cap_size(gen[y]) * value(EP[:vCOMMIT][y, t])
             else
-                total += mw_s_per_mw(gen[y]) * pP_Max[y, t] * value(EP[:eTotalCap][y])
+                inertia[y, t] = mw_s_per_mw(gen[y]) * pP_Max[y, t] * value(EP[:eTotalCap][y])
             end
         end
-        inertia[1, t] = total * scale_factor
     end
+    inertia .*= scale_factor
 
-    df = DataFrame(Resource = ["System"], Zone = [0], AnnualSum = inertia * weight)
+    df = DataFrame(Resource = resources,
+        Zone = zones)
+    df.AnnualSum = inertia * weight
+
     write_temporal_data(df, inertia, path, setup, "inertia")
     return df
 end
