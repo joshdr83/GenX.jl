@@ -16,10 +16,13 @@ function load_inertia_requirement!(setup::Dict, path::AbstractString, inputs::Di
 
     df = load_dataframe(file_path)
 
-    # if :MW_s ∉ names(df)
-    #     error("inertia_req.csv data file is missing column MW_s")
-    # end
+    names_normalized = Symbol.(lowercase.(strip.(replace.(String.(names(df)), "\ufeff" => ""))))
+    rename!(df, names_normalized)
 
+    if :mw_s ∉ names(df)
+        error("inertia_req.csv data file is missing column MW_s. Columns found: " * join(string.(names(df)), ", ") * " (" * file_path * ")")
+    inputs["InertiaRequirementTS"] = df[!, :mw_s]
+    println(filename * " Successfully Read! (" * file_path * ")")
     inputs["InertiaRequirementTS"] = df[!, :MW_s]
     println(filename * " Successfully Read!")
 end

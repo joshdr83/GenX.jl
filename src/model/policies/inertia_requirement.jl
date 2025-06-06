@@ -19,9 +19,11 @@ function inertia_requirement!(EP::Model, inputs::Dict, setup::Dict)
 
     mw_s = [get(gen[y], :mw_s_per_mw, 0.0) for y in 1:G]
 
-    @expression(EP, eInertiaBalance[t = 1:T],
+    @expression(EP, eInertiaBalance_tmp[t = 1:T],
         sum(EP[:eTotalCap][y] * scale_factor * mw_s[y] * pP[y, t] *
             (y in COMMIT ? EP[:vCOMMIT][y, t] : 1) for y in 1:G))
+
+    add_similar_to_expression!(EP[:eInertiaBalance], eInertiaBalance_tmp)
 
     @constraint(EP,
         cInertiaRequirement[t = 1:T],
