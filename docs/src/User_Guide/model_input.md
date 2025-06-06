@@ -484,10 +484,8 @@ In addition to the files described above, the `resources` folder contains a fold
 6) `Resource_hourly_matching.csv`
 7) `inertia_req.csv`
 
-The `inertia_req.csv` file must include a column named `MW_s` (case
-insensitive). Leading and trailing spaces as well as UTF‑8 byte‑order
-marks in the header are ignored. The column contains 8760 hourly values
-describing the minimum system inertia requirement in
+The `inertia_req.csv` file must include a column named `MW_s` with
+8760 hourly values describing the minimum system inertia requirement in
 megawatt-seconds. Any additional columns in the file are ignored.
 
 !!! note
