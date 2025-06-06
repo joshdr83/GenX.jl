@@ -484,9 +484,10 @@ In addition to the files described above, the `resources` folder contains a fold
 6) `Resource_hourly_matching.csv`
 7) `inertia_req.csv`
 
-The `inertia_req.csv` file must contain a single column named
-`MW_s` (case insensitive) with 8760 hourly values describing the
-minimum system inertia requirement in megawatt-seconds.
+The `inertia_req.csv` file must include a column named `MW_s`
+(case insensitive) with 8760 hourly values describing the minimum
+system inertia requirement in megawatt-seconds. Any additional
+columns in the file are ignored.
 
 !!! note
     These files are optional and can be omitted if no policy-related settings are specified in the `genx_settings.yml` file. Also, not all the resources need to be included in these files, only those for which the policy applies.
