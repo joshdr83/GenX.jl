@@ -23,7 +23,7 @@ function write_inertia(path::AbstractString, inputs::Dict, setup::Dict, EP::Mode
     df = DataFrame(AnnualSum = sum(inertia .* inputs["omega"]))
     df = hcat(df, DataFrame(transpose(inertia), :auto))
     names!(df, [:AnnualSum; Symbol.("t" .* string.(1:T))])
-    CSV.write(joinpath(path, "inertia.csv"), dftranspose(df, false), header=false)
+    CSV.write(joinpath(path, "inertia.csv"), dftranspose(df, false), writeheader=false)
     if setup["OutputFullTimeSeries"] == 1 && setup["TimeDomainReduction"] == 1
         write_full_time_series_reconstruction(path, setup, df, "inertia")
         @info("Writing Full Time Series for inertia")

@@ -23,8 +23,9 @@ function load_inertia_requirement!(setup::Dict, path::AbstractString, inputs::Di
         return nothing
     end
 
-    # normalize column names: remove BOMs, trim whitespace, and lowercase
-    clean(name) = lowercase(strip(replace(String(name), '\ufeff' => "")))
+    # normalize column names: remove UTF-8 byte order marks and whitespace,
+    # then convert to lowercase
+    clean(name) = lowercase(strip(replace(String(name), "\ufeff" => "")))
     rename!(df, Symbol.(clean.(names(df))))
     if :mw_s ∉ names(df)
         cols = join(names(df), ", ")
