@@ -136,6 +136,21 @@ function get_systemfiles_path(setup::Dict,
     end
 end
 
+"""
+    get_policiesfiles_path(setup::Dict, TDR_directory::AbstractString, path::AbstractString)
+
+Determine the directory for policy files, considering time domain reduction.
+"""
+function get_policiesfiles_path(setup::Dict,
+        TDR_directory::AbstractString,
+        path::AbstractString)
+    if setup["TimeDomainReduction"] == 1 && time_domain_reduced_files_exist(TDR_directory)
+        return TDR_directory
+    else
+        return path
+    end
+end
+
 abstract type AbstractLogMsg end
 struct ErrorMsg <: AbstractLogMsg
     msg::String

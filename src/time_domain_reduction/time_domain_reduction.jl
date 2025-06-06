@@ -682,6 +682,7 @@ function cluster_inputs(inpath,
     Fuel_Outfile = joinpath(TimeDomainReductionFolder, "Fuels_data.csv")
     PMap_Outfile = joinpath(TimeDomainReductionFolder, "Period_map.csv")
     YAML_Outfile = joinpath(TimeDomainReductionFolder, "time_domain_reduction_settings.yml")
+    Inertia_Outfile = joinpath(TimeDomainReductionFolder, "min_inertia_req.csv")
 
     # Define a local version of the setup so that you can modify the mysetup["ParameterScale"] value to be zero in case it is 1
     mysetup_local = copy(mysetup)
@@ -1187,6 +1188,24 @@ function cluster_inputs(inpath,
     GVOutputData = vcat(gvDFs...)     # Generators Variability
     DMOutputData = vcat(dmDFs...)     # Demand Profiles
     FPOutputData = vcat(fpDFs...)     # Fuel Profiles
+    if mysetup["InertiaRequirement"] == 1
+        # Read inertia requirement data from the first stage (or case folder)
+        if MultiStage == 1 && stage_id == -99
+            inertia_path = joinpath(inpath, "inputs", "inputs_p1", mysetup["PoliciesFolder"], "min_inertia_req.csv")
+        elseif MultiStage == 1
+            inertia_path = joinpath(inpath, "inputs", "inputs_p$(stage_id)", mysetup["PoliciesFolder"], "min_inertia_req.csv")
+        else
+            inertia_path = joinpath(inpath, mysetup["PoliciesFolder"], "min_inertia_req.csv")
+        end
+        inertia_df = load_dataframe(inertia_path)
+        inds = reduce(vcat, [((M[m]-1) * TimestepsPerRepPeriod + 1):(M[m] * TimestepsPerRepPeriod) for m in 1:length(M)])
+        InertiaOutputData = inertia_df[inds, :]
+        if :Time_Index in names(InertiaOutputData)
+            InertiaOutputData[!, :Time_Index] = 1:size(InertiaOutputData, 1)
+        end
+    else
+        InertiaOutputData = DataFrame()
+    end
 
     ##### Step 5: Evaluation
 
@@ -1243,6 +1262,7 @@ function cluster_inputs(inpath,
                 Stage_Outfiles[per]["Fuel"] = joinpath("inputs_p$per", Fuel_Outfile)
                 Stage_Outfiles[per]["PMap"] = joinpath("inputs_p$per", PMap_Outfile)
                 Stage_Outfiles[per]["YAML"] = joinpath("inputs_p$per", YAML_Outfile)
+                Stage_Outfiles[per]["Inertia"] = joinpath("inputs_p$per", Inertia_Outfile)
                 if !isempty(inputs_dict[per]["VRE_STOR"])
                     Stage_Outfiles[per]["GSolar"] = joinpath("inputs_p$per",
                         SolarVar_Outfile)
@@ -1364,6 +1384,10 @@ function cluster_inputs(inpath,
                 end
                 YAML.write_file(joinpath(inpath, "inputs", Stage_Outfiles[per]["YAML"]),
                     myTDRsetup)
+                if mysetup["InertiaRequirement"] == 1
+                    CSV.write(joinpath(inpath, "inputs", Stage_Outfiles[per]["Inertia"]),
+                        InertiaOutputData)
+                end
             end
 
         else
@@ -1511,6 +1535,10 @@ function cluster_inputs(inpath,
             YAML.write_file(
                 joinpath(inpath, "inputs", input_stage_directory, YAML_Outfile),
                 myTDRsetup)
+            if mysetup["InertiaRequirement"] == 1
+                CSV.write(joinpath(inpath, "inputs", input_stage_directory, Inertia_Outfile),
+                    InertiaOutputData)
+            end
         end
     else
         if v
@@ -1623,6 +1651,9 @@ function cluster_inputs(inpath,
             println("Writing .yml settings...")
         end
         YAML.write_file(joinpath(inpath, YAML_Outfile), myTDRsetup)
+        if mysetup["InertiaRequirement"] == 1
+            CSV.write(joinpath(inpath, Inertia_Outfile), InertiaOutputData)
+        end
     end
 
     return Dict("OutputDF" => FinalOutputData,
